@@ -1,0 +1,98 @@
+import java.lang.*;
+import java.util.*;
+class hamming
+{
+	public static void generateCode(StringBuffer data)
+	{
+		int i=1,temp,flag=0,count=0;
+			boolean skip=false;
+		for(i=1;i<data.length();i*=2)
+		{
+			temp=i;
+			count=0;
+			for(int j=i+1;j<data.length();j++)
+			{
+				flag=j/temp;
+				if(flag%2==0)
+					skip=true;
+				else
+					skip=false;	
+				if(!skip)
+				{
+					if(data.charAt(j)=='1')
+						count++;
+				}
+					
+			}
+			if(count%2==0)
+				data.replace(i, i+1,"0") ;
+			else
+			data.replace(i, i+1,"1") ;	
+		}
+	}
+	
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		StringBuffer data=new StringBuffer();
+		StringBuffer temp=new StringBuffer();
+
+		int i=1,ch,position=0;
+		System.out.print("**MENU**\n1.Generate Hamming Code\n2.Detect and Correct Errors in Received Data\nEnter Choice : ");
+		ch=sc.nextInt();
+		System.out.print("ENTER DATA : ");
+		data.append(" ");
+		data.append(sc.next());
+		temp.append(data);
+		switch(ch)
+		{
+		case 1:
+			while(i<data.length())
+			{
+			data.insert(i,"-");
+			i*=2;
+			}
+			System.out.println("Hamming code : "+data);
+			hamming.generateCode(data);
+			System.out.println("Data sent: "+data);
+			break;
+
+		case 2:
+			hamming.generateCode(temp);
+			i=1;
+			while(i<data.length())
+			{
+			System.out.print("Parity Bit "+i+" "+temp.charAt(i));
+			if(data.charAt(i)!=temp.charAt(i))
+			{
+				position+=i;
+				System.out.print(" ERROR");
+			}
+			System.out.println();
+			i*=2;
+			}
+			if(position==0)
+				System.out.println("No Error");
+			else
+			{
+			System.out.println("Error at position : "+position);
+			if(data.charAt(position)=='1')
+				
+			data.replace(position,position+1,"0");
+			else 
+			data.replace(position,position+1,"1");
+			}
+			System.out.println("Corrected Code : "+data);
+			i=1;
+			while(i<data.length())
+				i*=2;
+			i/=2;
+			while(i>0)
+			{
+			data.deleteCharAt(i);
+			i/=2;
+			}
+			System.out.println("Data : "+data);
+		}
+	}
+}

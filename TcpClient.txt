@@ -1,0 +1,89 @@
+import java.io.*;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+public class ChatSocketClient
+{
+	private static Socket socket=null;
+	private static InputStream inStream=null;
+	private static OutputStream outStream=null;
+
+	public static void createSocket()
+	{
+		try
+		{
+			socket=new Socket(InetAddress.getByName("localHost"),3339);
+			System.out.println("Connected!");
+			inStream= socket.getInputStream();
+			outStream = socket.getOutputStream();
+			createReadThread();
+			createWriteThread();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	public static void createReadThread()
+	{
+		
+		Thread readThread = new Thread() {
+			public void run ()
+			{
+				while(socket.isConnected())
+				{
+					try
+					{
+						byte[] readBuffer = new byte[200];
+						int num = inStream.read(readBuffer);
+						if(num>0)
+						{
+							
+							String recievedMessage = new String(readBuffer);
+							System.out.println("Recieved Message :" +recievedMessage);
+						}
+						
+					}	
+					catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		readThread.setPriority(Thread.MAX_PRIORITY);
+		readThread.start();
+	}
+	public static void createWriteThread()
+	{
+		Thread writeThread = new Thread()
+		{
+			public void run()
+			{
+				while( socket.isConnected())
+				{
+					try
+					{
+						BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+						String typedMessage = inputReader.readLine();
+						if (typedMessage != null && typedMessage.length()>0)
+						{
+							synchronized (socket)
+							{
+								outStream.write( typedMessage.getBytes());
+							}
+						}
+					}
+					catch(Exception e){
+						e.printStackTrace();
+					}				
+				}
+			}
+		};
+		writeThread.setPriority(Thread.MAX_PRIORITY);
+		writeThread.start();
+	}
+	public static void main (String args[]) throws Exception
+	{
+		createSocket();
+	}
+}

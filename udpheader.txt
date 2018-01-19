@@ -1,0 +1,48 @@
+import java.util.*;
+class UDPheader
+{
+	public static long convert(String s)
+	{
+		int count=1,c;
+		long sum=0;
+		for(int i=1;i<s.length();i++)
+			count*=16; 			//calculate power of 16 for the most significant bit
+		for(int i=0;i<s.length();i++)
+		{
+			c=(int)s.charAt(i);		//convert string characters to int. because you cant perform arithmetic operations on characters
+			if(c>=65)			// type casting char to int gives the ascii values of char 
+				c=c-55;			//ascii of A is 65. hence to get 10 we need to subtract 55. 65-55=10 which is the value of A
+			else	
+				c=c-48;			//ascii of 0 is 48. 1 is 49 hence 49-48=1 that is the value of 1
+			sum=sum+count*c;
+			count/=16;
+		}
+		return sum;
+	}
+	public static void main(String arg[])
+	{
+		Scanner sc=new Scanner(System.in);
+		String str;
+		long sum;
+		System.out.println("ENTER STRING : ");
+		str=sc.nextLine();
+		System.out.println("SOURCE PORT ADDRESS : ");
+		System.out.println("HEX : "+str.substring(0,4));
+		sum=convert(str.substring(0,4));
+		System.out.println("DECIMAL : "+sum);
+		System.out.println("DESTINATION PORT ADDRESS : ");
+		System.out.println("HEX : "+str.substring(4,8));
+		sum=convert(str.substring(4,8));
+		System.out.println("DECIMAL : "+sum);
+		System.out.println("TOTAL LENGTH : ");
+		System.out.println("HEX : "+str.substring(8,12));
+		sum=convert(str.substring(8,12));
+		System.out.println("DECIMAL : "+sum);
+		System.out.println("CHECKSUM  : ");
+		System.out.println("HEX : "+str.substring(12,16));
+		sum=convert(str.substring(12,16));
+		System.out.println("DECIMAL : "+sum);
+	}
+}
+
+

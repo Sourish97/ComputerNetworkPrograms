@@ -1,0 +1,94 @@
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+
+public class ChatSocketServer
+{
+	private ServerSocket serverSocket = null;
+	private Socket socket = null;
+	private InputStream inStream = null;
+	private OutputStream outStream = null;
+
+	public void createSocket()
+	{
+		try
+		{
+			serverSocket=new ServerSocket(3339);
+			while(true)
+			{
+				socket = serverSocket.accept();
+				inStream=socket.getInputStream();
+				outStream=socket.getOutputStream();
+				System.out.println("Connected");
+				createReadThread();
+				createWriteThread();
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void createReadThread()
+	{
+		Thread readThread=new Thread(){
+			public void run()
+			{
+				while(socket.isConnected())
+				{
+					try
+					{
+						byte[] readBuffer=new byte[200];
+						int num=inStream.read(readBuffer);
+						if(num>0)
+						{
+
+							String receivedMessage=new String(readBuffer);
+							System.out.println("Received message : "+receivedMessage);
+						}
+					}
+						catch(Exception e)
+						{
+							e.printStackTrace();
+						}
+				}
+			}
+		};
+		readThread.setPriority(Thread.MAX_PRIORITY);
+		readThread.start();
+	}
+	public void createWriteThread()
+	{
+		Thread writeThread=new Thread(){
+			public void run()
+			{
+				while(socket.isConnected())
+				{
+					try
+					{
+						BufferedReader inputReader=new BufferedReader(new InputStreamReader(System.in));
+						String typedMessage=inputReader.readLine();
+						if(typedMessage.length()>0)
+						{
+							synchronized(socket)
+							{
+								outStream.write(typedMessage.getBytes());
+							}
+						}
+					}
+						catch(Exception e)
+					{
+						e.printStackTrace();
+					}				}
+			}
+		};
+		//writeThread.setPriority(Thread.MAX_PRIORITY);
+		writeThread.start();
+	}	
+	public static void main(String arg[])
+	{
+		ChatSocketServer chatServer=new ChatSocketServer();
+		chatServer.createSocket();
+	}
+}

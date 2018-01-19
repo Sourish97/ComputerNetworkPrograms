@@ -1,0 +1,177 @@
+import java.util.*;
+class IPAddress
+ {
+  public static void main(String args[])
+   {
+    char c;
+    String mask = new String();
+    String first = "";
+    String last = "";
+    String str = new String();
+    String str1 = new String();
+    int n, temp, i, j, i1, m1, i2, i3, m2, m3, t1, t2, no=1;
+    char ipclass;
+    String addr=new String();
+    int ip[] = new int[4];
+    int subnet[] = new int[32];
+    Scanner sc=new Scanner(System.in);
+    System.out.println("Address form:\n1. Decimal\n2. Binary");
+    n=sc.nextInt();
+    System.out.println("Enter the address: ");
+    if(n==1)
+     {
+      addr=sc.next();
+      i1=addr.indexOf(".");  
+      str = addr.substring(0,i1);
+      temp=Integer.parseInt(str);
+      if(temp>=0&&temp<=127)
+       ipclass='A';
+      else if(temp>=128&&temp<=191)
+       ipclass='B';
+      else if(temp>=192&&temp<=223)
+       ipclass='C';
+      else if(temp>=224&&temp<=239)
+       ipclass='D';
+      else
+       ipclass='E';
+     }
+    else
+     {
+      addr=sc.next();
+      str = addr.substring(0,4);
+      for(i=0;i<4;i++)
+       {
+        c = str.charAt(i);
+        str1 = Character.toString(c);
+        ip[i]=Integer.parseInt(str1);
+       }
+      if(ip[0]==0)
+       ipclass='A';
+      else
+       {
+        if(ip[1]==1)
+         {
+          if(ip[2]==1)
+           {
+            if(ip[3]==1)
+             {
+              ipclass='E';
+             }
+            else
+             {
+              ipclass='D';
+             }
+           }
+          else
+           {
+            ipclass='C';
+           }
+          }  
+         else
+          {
+           ipclass='B';
+          }
+         }
+       }
+    System.out.println("IP Address is of Class "+ipclass);
+    switch(ipclass)
+     {
+      case 'A':
+       mask="255.0.0.0";
+       break;
+      case 'B':
+       mask="255.255.0.0";
+       break;
+      case 'C':
+       mask="255.255.255.0";
+       break;
+     }
+    System.out.println("Subnet is: "+mask);
+    if(n==2)
+     {
+       String temp1 = "";
+        temp1+=Integer.parseInt(addr.substring(0,8),2);
+        temp1+=".";
+        temp1+=Integer.parseInt(addr.substring(9,17),2);
+        temp1+=".";
+        temp1+=Integer.parseInt(addr.substring(18,26),2);
+        temp1+=".";
+        temp1+=Integer.parseInt(addr.substring(27,35),2);
+        addr=temp1;
+     }
+    i1=addr.indexOf(".");  
+    i2=addr.indexOf(".", i1+1);
+    i3=addr.indexOf(".", i2+1);
+    m1=mask.indexOf(".");
+    m2=mask.indexOf(".", m1+1);
+    m3=mask.indexOf(".", m2+1);
+    str = addr.substring(0,i1);
+    str1 = mask.substring(0,m1);
+    t1 = Integer.parseInt(str);
+    t2 = Integer.parseInt(str1);
+    first+=Integer.toString(t1&t2);
+    last+=Integer.toString(t1|(t2^255));
+    first+=".";
+    last+=".";
+    if(t2!=255)
+     no=no*(t2^255);
+    str = addr.substring(i1+1,i2);
+    str1 = mask.substring(m1+1,m2);
+    t1 = Integer.parseInt(str);
+    t2 = Integer.parseInt(str1);
+    first+=Integer.toString(t1&t2);
+    last+=Integer.toString(t1|(t2^255));
+    first+=".";
+    last+=".";
+    if(t2!=255)
+     no=no*(t2^255);
+    str = addr.substring(i2+1,i3);
+    str1 = mask.substring(m2+1,m3);
+    t1 = Integer.parseInt(str);
+    t2 = Integer.parseInt(str1);
+    first+=Integer.toString(t1&t2);
+    last+=Integer.toString(t1|(t2^255));
+    first+=".";
+    last+=".";
+    if(t2!=255)
+     no=no*(t2^255);
+    str = addr.substring(i3+1,addr.length());
+    str1 = mask.substring(m3+1,mask.length());
+    t1 = Integer.parseInt(str);
+    t2 = Integer.parseInt(str1);
+    first+=Integer.toString(t1&t2);
+    last+=Integer.toString(t1|(t2^255));
+    if(t2!=255)
+     no=no*(t2^255);
+   System.out.println("First Address is: "+first);
+   System.out.println("Last Address is: "+last);
+   System.out.println("Total Number of Addresses: "+(no+1));
+   }
+ }
+
+OUTPUT:
+java IPAddress
+Address form:
+1. Decimal
+2. Binary
+1
+Enter the address:
+192.163.253.123
+IP Address is of Class C
+Subnet is: 255.255.255.0
+First Address is: 192.163.253.0
+Last Address is: 192.163.253.255
+Total Number of Addresses: 256
+
+java IPAddress
+Address form:
+1. Decimal
+2. Binary
+2
+Enter the address:
+00000001.00001011.00001011.11101111
+IP Address is of Class A
+Subnet is: 255.0.0.0
+First Address is: 1.0.0.0
+Last Address is: 1.255.255.255
+Total Number of Addresses: 16581376

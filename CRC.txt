@@ -1,0 +1,63 @@
+import java.util.Scanner;
+
+public class crc {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter dataword");
+		String dw=sc.next();
+		System.out.println("Enter generator");
+		String gen=sc.next();
+		int cwlen=dw.length()+gen.length()-1;
+		String temp=dw;
+		for(int i=0;i<gen.length()-1;i++){
+			temp+=0;
+		}
+		int[] dividend=new int[cwlen];
+		int[] divisor=new int[gen.length()];
+		int[] divisor1=new int[gen.length()];
+		for(int i=0;i<cwlen;i++){
+			dividend[i]=Integer.parseInt(temp.charAt(i)+"");
+		}
+		for(int i=0;i<gen.length();i++){
+			divisor[i]=Integer.parseInt(gen.charAt(i)+"");
+			divisor1[i]=0;
+		}
+		String quotient="";
+		String remainder="";
+		for(int i=0;i<cwlen-gen.length()+1;i++){
+			if(dividend[i]==1){
+				for(int j=0;j<gen.length();j++){
+					dividend[i+j]=dividend[i+j]^divisor[j];
+						
+				}
+				quotient+=1;
+			}
+			else{
+				for(int j=0;j<gen.length();j++){
+					dividend[i+j]=dividend[i+j]^divisor1[j];
+					}
+				quotient+=0;
+			}
+					
+		}
+	System.out.println("Codeword:");
+	for(int i=dw.length();i<cwlen;i++){
+		remainder+=dividend[i];
+	}
+	String cw=dw+remainder;
+	System.out.print(cw);
+	}
+
+}
+
+
+OUTPUT:
+java CRC
+Enter the data word
+1001
+Enter the generator polynomial:
+1011
+Codeword
+1001110

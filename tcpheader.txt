@@ -1,0 +1,167 @@
+import java.util.*;
+class Header
+{
+	long convert(String s)
+	{
+		int count=1,c;
+		long sum=0;
+		for(int i=1;i<s.length();i++)
+			count*=16; 			//calculate power of 16 for the most significant bit
+		for(int i=0;i<s.length();i++)
+		{
+			c=(int)s.charAt(i);		//convert string characters to int. because you cant perform arithmetic operations on characters
+			if(c>=65)			// type casting char to int gives the ascii values of char 
+				c=c-55;			//ascii of A is 65. hence to get 10 we need to subtract 55. 65-55=10 which is the value of A
+			else	
+				c=c-48;			//ascii of 0 is 48. 1 is 49 hence 49-48=1 that is the value of 1
+			sum=sum+count*c;
+			count/=16;
+		}
+		return sum;
+	}
+	void binary(long sum,long bin[])
+	{
+		int i=11;
+		while(sum!=0)
+		{
+			bin[i]=sum%2;
+			sum=sum/2;
+			i--;
+		}
+		while(i>=0)
+		{
+			bin[i]=0;
+			i--;
+		}
+	}
+	public static void main(String arg[])
+	{
+		long sum,hlen;
+		int hl=0;
+		String str;
+		long bin[]=new long[12];
+		Header h=new Header();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("ENTER STRING");
+		str=sc.nextLine();
+		System.out.println("\nSOURCE PORT ADDRESS : ");
+		System.out.println(" HEX : " + str.substring(0, 4));
+		sum=h.convert(str.substring(0, 4));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nDESTINATION PORT ADDRESS : ");
+		System.out.println(" HEX : " + str.substring(4, 8));
+		sum=h.convert(str.substring(4,8));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nSEQUENCE NUMBER : ");
+		System.out.println(" HEX : " + str.substring(8, 16));
+		sum=h.convert(str.substring(8,16));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nACKNOWLEDGEMENT NUMBER : ");
+		System.out.println(" HEX : " + str.substring(16, 24));
+		sum=h.convert(str.substring(16,24));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nHEADER LENGTH : ");
+		System.out.println(" HEX : " + str.substring(24,25));
+		sum=h.convert(str.substring(24,25));
+		hlen=sum;
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nRESERVED : ");
+		sum=h.convert(str.substring(25,28));
+		h.binary(sum,bin);
+		System.out.println(" BINARY : "+bin[0]+bin[1]+bin[2]+bin[3]+bin[4]+bin[5]);
+		
+		System.out.println("\nFLAGS : \n URG :"+bin[6]+"\n ACK :"+bin[7]+"\n PSH :"+bin[8]+"\n RST :"+bin[9]+"\n SYN :"+bin[10]+"\n FIN :"+bin[11]);
+
+		System.out.println("\nWINDOW SIZE : ");
+		System.out.println(" HEX : " + str.substring(28,32));
+		sum=h.convert(str.substring(28,32));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nCHECKSUM : ");
+		System.out.println(" HEX : " + str.substring(32,36));
+		sum=h.convert(str.substring(32,36));
+		System.out.println(" DECIMAL : "+sum);
+
+		System.out.println("\nURGENT POINTER : ");
+		System.out.println(" HEX : " + str.substring(36,40));
+		sum=h.convert(str.substring(36,40));
+		System.out.println(" DECIMAL : "+sum);
+	
+		hl=40;
+		System.out.println("\nOPTIONS AND PADDING: ");
+		System.out.print(" HEX : ");
+		if(hlen*4>20)
+		{
+			hlen*=4;
+			hlen-=20;
+			hlen*=2;
+			hl=(int)hlen;
+			System.out.println(str.substring(40,40+hl));
+			hl+=40;
+		}
+		
+		System.out.println("\nDATA : ");
+		System.out.println(" HEX : " + str.substring(hl));
+	}
+}
+
+
+
+OUTPUT:
+
+ENTER STRING
+000A000B0000A1110000C0016012AB001234000110002000ABCDEFABCDEF
+
+SOURCE PORT ADDRESS :
+ HEX : 000A
+ DECIMAL : 10
+
+DESTINATION PORT ADDRESS :
+ HEX : 000B
+ DECIMAL : 11
+
+SEQUENCE NUMBER :
+ HEX : 0000A111
+ DECIMAL : 41233
+
+ACKNOWLEDGEMENT NUMBER :
+ HEX : 0000C001
+ DECIMAL : 49153
+
+HEADER LENGTH :
+ HEX : 6
+ DECIMAL : 6
+
+RESERVED :
+ BINARY : 000000
+
+FLAGS :
+ URG :0
+ ACK :1
+ PSH :0
+ RST :0
+ SYN :1
+ FIN :0
+
+WINDOW SIZE :
+ HEX : AB00
+ DECIMAL : 43776
+
+CHECKSUM :
+ HEX : 1234
+ DECIMAL : 4660
+
+URGENT POINTER :
+ HEX : 0001
+ DECIMAL : 1
+
+OPTIONS AND PADDING:
+ HEX : 10002000
+
+DATA :
+ HEX : ABCDEFABCDEF

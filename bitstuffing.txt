@@ -1,0 +1,46 @@
+import java.util.*;
+class Bitstuffing
+ {
+  public static void main(String args[])
+   {
+    int i,c=0;
+    String input, stuff, destuff="";
+    String flag="01111110";
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter the data word: ");
+    input=sc.next();
+    stuff = flag;
+    for(i=0;i<input.length();i++)
+     {
+      stuff=stuff+input.charAt(i);
+      if(input.charAt(i)=='1')
+       c++;
+      else
+       c=0;
+      if(c==5)
+       { 
+        stuff+='0';
+        c=0;
+       }
+     }
+    stuff+=flag;
+    System.out.println("Data after bit stuffing is: "+stuff);
+
+    c=0;
+    for(i=8;i<stuff.length()-8;i++)
+     {
+    	if(c==5)
+        {   
+         c=0;
+         continue;
+        }
+      if(stuff.charAt(i)=='1')
+       c++;  
+      else
+       c=0;
+      destuff+=stuff.charAt(i);    
+      
+     }
+    System.out.println("Data after bit de-stuffing is: "+destuff);
+   }
+ }

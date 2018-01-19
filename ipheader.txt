@@ -1,0 +1,66 @@
+import java.io.*;
+
+public class ipheader {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int dec;
+        System.out.println("Please enter the Hex Dump:");
+        String input = br.readLine();
+        
+        String ipver = input.substring(0,1);
+		dec = hex2decimal(ipver);
+        System.out.println("IP version: " + dec);
+        
+        String hlen = input.substring(1,2);
+		dec = hex2decimal(hlen);
+        System.out.println("Header Length: " + dec);
+        
+        String tos = input.substring(2,4);
+		dec = hex2decimal(tos);
+        System.out.println("Type of service: " + dec);
+        
+        String tlen= input.substring(4,8);
+		dec = hex2decimal(tlen);
+        System.out.println("total length: " + dec);
+		
+		String fragid= input.substring(8,12);
+		dec = hex2decimal(fragid);
+        System.out.println("Fragment id: " + dec);
+		
+		String fragoffset= input.substring(12,16);
+		dec = hex2decimal(fragoffset);
+        System.out.println("Fragment offset: " + dec);
+		
+		  String ttl = input.substring(16,18);
+		  dec = hex2decimal(ttl);
+        System.out.println("Type of service: " + dec);
+		
+		  String hpro = input.substring(18,20);
+		  dec = hex2decimal(hpro);
+        System.out.println("Type of service: " + dec);
+
+		String hcheck= input.substring(20,24);
+		dec = hex2decimal(hcheck);
+        System.out.println("total length: " + dec);   
+
+		//String Sourceip=input.substring(24,32);
+		System.out.println("Source ip addresss:"+Integer.parseInt(input.substring(24,26),16)+"."+Integer.parseInt(input.substring(26,28),16)+"."+Integer.parseInt(input.substring(28,30),16)+"."+Integer.parseInt(input.substring(30,32),16));
+			
+		//String Destip=input.substring(32,40);
+			System.out.println("Destination ip addresss:"+Integer.parseInt(input.substring(32,34),16)+"."+Integer.parseInt(input.substring(34,36),16)+"."+Integer.parseInt(input.substring(36,38),16)+"."+Integer.parseInt(input.substring(38,40),16));
+        	}
+	public static int hex2decimal(String s)
+    {
+             String digits = "0123456789ABCDEF";
+             s = s.toUpperCase();
+             int val = 0;
+             for (int i = 0; i < s.length(); i++)
+             {
+                 char c = s.charAt(i);
+                 int d = digits.indexOf(c);
+                 val = 16*val + d;
+             }
+             return val;
+    }
+}

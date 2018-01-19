@@ -1,0 +1,139 @@
+import java.util.*;
+class Dijkstra
+ {
+  public static void main(String args[])
+   {
+    int min, current, nodes, source, destination, i, j;
+    int adj[][] = new int[20][20];
+    int dist[] = new int[20];
+    int sel[] = new int[20];
+    int prev[] = new int[20];
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter the number of nodes: ");
+    nodes=sc.nextInt();
+    System.out.print("Enter the adjacency matrix: ");
+    for(i=0;i<nodes;i++)
+     {
+      for(j=0;j<nodes;j++)
+       {
+        adj[i][j] = sc.nextInt();
+      }
+      
+     }
+    System.out.print("Enter the source and destination: ");
+  source = sc.nextInt();
+  destination = sc.nextInt();
+  current=source;
+  for(i=0;i<nodes;i++){
+	  dist[i]=999;
+	  sel[i]=0;
+	  prev[i]=-1;
+  }
+  for(i=0;i<nodes;i++){
+	  if(adj[current][i]!=0){
+		  dist[i]=adj[current][i];
+		  prev[i]=current;
+	  }
+  }
+  dist[current]=0;
+  sel[current]=1;
+  while(current!=destination){
+	  for(i=0;i<nodes;i++){
+		  if(adj[current][i]!=0 && sel[i]==0){
+			  if(dist[i]>adj[current][i] +dist[current]){
+				  dist[i]=adj[current][i] +dist[current];
+				  prev[i]=current;
+			  }
+		  }
+	  }
+	  min=12345;
+	  for(i=0;i<nodes;i++){
+		  if(sel[i]==0 && dist[i]<min){
+			  min=dist[i];
+			  current=i;
+		  }
+	  }
+	  sel[current]=1;
+  }
+  System.out.println("Minimum cost is: "+dist[destination]);
+  System.out.print(source);
+  printpath(prev,destination);
+ }
+ static void printpath(int p[], int d)
+ {
+    if (p[d]==-1)
+        return;
+    printpath(p, p[d]);
+    System.out.print("-"+d);
+ }
+}
+
+import java.util.*;
+class Dijkstra
+ {
+  public static void main(String args[])
+   {
+    int min, current, nodes, source, destination, i, j;
+    int adj[][] = new int[20][20];
+    int dist[] = new int[20];
+    int sel[] = new int[20];
+    int prev[] = new int[20];
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter the number of nodes: ");
+    nodes=sc.nextInt();
+    System.out.print("Enter the adjacency matrix: ");
+    for(i=0;i<nodes;i++)
+     {
+      for(j=0;j<nodes;j++)
+       {
+        adj[i][j] = sc.nextInt();
+      }
+      
+     }
+    System.out.print("Enter the source and destination: ");
+  source = sc.nextInt();
+  destination = sc.nextInt();
+  current=source;
+  for(i=0;i<nodes;i++){
+	  dist[i]=999;
+	  sel[i]=0;
+	  prev[i]=-1;
+  }
+  for(i=0;i<nodes;i++){
+	  if(adj[current][i]!=0){
+		  dist[i]=adj[current][i];
+		  prev[i]=current;
+	  }
+  }
+  dist[current]=0;
+  sel[current]=1;
+  while(current!=destination){
+	  for(i=0;i<nodes;i++){
+		  if(adj[current][i]!=0 && sel[i]==0){
+			  if(dist[i]>adj[current][i] +dist[current]){
+				  dist[i]=adj[current][i] +dist[current];
+				  prev[i]=current;
+			  }
+		  }
+	  }
+	  min=12345;
+	  for(i=0;i<nodes;i++){
+		  if(sel[i]==0 && dist[i]<min){
+			  min=dist[i];
+			  current=i;
+		  }
+	  }
+	  sel[current]=1;
+  }
+  System.out.println("Minimum cost is: "+dist[destination]);
+  System.out.print(source);
+  printpath(prev,destination);
+ }
+ static void printpath(int p[], int d)
+ {
+    if (p[d]==-1)
+        return;
+    printpath(p, p[d]);
+    System.out.print("-"+d);
+ }
+}

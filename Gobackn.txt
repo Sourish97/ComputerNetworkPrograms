@@ -1,0 +1,62 @@
+import java.util.*;
+class Gobackn
+ {
+  public static void main(String args[])
+   {
+    int frames,i, ack, window, count=0;
+    Scanner sc = new Scanner(System.in);
+    Random r = new Random();
+    System.out.println("Number of frames to be transmitted: ");
+    frames=sc.nextInt();
+    System.out.println("Enter the window size: "); 
+    window=sc.nextInt();
+    System.out.println("Sending frames: ");
+    for(i=1;i<=window;i++)
+     {
+      System.out.print(i+"\t");
+      count++;
+     }
+    ack=r.nextInt(window)+1;
+    System.out.println("\nACK"+ack);
+    for(i=1;i<=window;i++)
+     {
+      System.out.print(i+"\t");
+      count++;
+     }
+    ack=r.nextInt(window)+1;
+    System.out.println("\nACK"+ack);
+    System.out.println("\nACK"+ack+" lost");
+    count=count-window+ack-1;
+    for(i=ack;i<=window;i++)
+     {
+      System.out.print(i+"\t");
+      count++;
+     }
+    while(count<frames)
+     {
+       for(i=1;i<=window&&count<frames;i++)
+        {
+          System.out.print(i+"\t");
+          count++;
+        }
+     }
+   }
+ }
+
+OUTPUT:
+java Gobackn
+Number of frames to be transmitted:
+44
+Enter the window size:
+7
+Sending frames:
+1       2       3       4       5       6       7
+ACK4
+1       2       3       4       5       6       7
+ACK5
+
+ACK5 lost
+5       6       7       1       2       3       4       5       6       7
+1       2       3       4       5       6       7       1       2       3
+4       5       6       7       1       2       3       4       5       6
+7       1       2
